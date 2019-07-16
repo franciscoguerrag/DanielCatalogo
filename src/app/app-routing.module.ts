@@ -1,15 +1,16 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
-import { ProductosComponent } from './productos/productos.component';
+import { Routes, RouterModule } from '@angular/router';
+import {CatalogComponent} from './pages/catalog/catalog.component';
+import {OrdersComponent} from './pages/orders/orders.component';
 
-const routes: Routes = [{
-  path: 'pedidos', loadChildren: () => import('./pedidos/pedidos.module').then(mod => mod.PedidosModule)
-}, {
-  path: '', component: ProductosComponent
-}];
+const routes: Routes = [
+  {path: 'orders', component: OrdersComponent},
+  {path: 'catalog', component: CatalogComponent},
+  {path: '**', redirectTo: 'catalog'}
+];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })],
+  imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule {  }
+export class AppRoutingModule { }

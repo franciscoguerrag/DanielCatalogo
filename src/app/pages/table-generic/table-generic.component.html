@@ -1,0 +1,130 @@
+<div class="bg-dashboard">
+  <div class="row" *ngIf="header">
+    <h2 class="">{{header}}</h2>
+    <div class="custom-h2 "></div>
+    <p class="justify-content-center align-self-center ">{{subHeader}}</p>
+
+  </div>
+
+  <div class="row">
+    <a matTooltip="Agregar nuevo producto" style="z-index:200;" mat-fab color="accent" (click)="addItemAction()"
+       *ngIf="actionAdd"
+    >+</a>
+
+    <mat-form-field [color]="'accent'" class="col-md-4">
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter" placeholder="Buscar">
+    </mat-form-field>
+
+    <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+      <!--- Note that these columns can be defined in any order.
+            The actual rendered columns are set as a property on the row definition" -->
+      <ng-container *ngFor="let item of itemsType; let i = index" matColumnDef="{{item.index}}">
+        <mat-header-cell *matHeaderCellDef> {{item.title}}</mat-header-cell>
+        <mat-cell [attr.data-label]="item.title" *matCellDef="let element">
+
+          <!--TEXTO-->
+          <ng-template [ngIf]="item.type == 'text'">
+            <a *ngIf="item.action" mat-button (click)="actionParent(element)">
+              {{item.customLabel ? item.customLabel : element[item.index]}}
+            </a>
+            <a *ngIf="item.addRowAction" mat-button (click)="addRow(element)">
+              {{item.customLabel ? item.customLabel : element[item.index]}}
+            </a>
+            <a *ngIf="item.viewRowAction" mat-button (click)="viewRow(element)">
+              {{item.customLabel ? item.customLabel : element[item.index]}}
+            </a>
+            <ng-template [ngIf]="!item.action && !item.viewRowAction && !item.addRowAction">
+              {{element[item.index]}}
+            </ng-template>
+          </ng-template>
+
+          <!--IMAGEN-->
+          <ng-template [ngIf]="item.type == 'image'">
+            <a *ngIf="item.action" (click)="actionParent(element)">
+              <img [src]="element[item.index]"/>
+            </a>
+            <a *ngIf="item.addRowAction" (click)="addRow(element)">
+              <img [src]="element[item.index]"/>
+            </a>
+            <a *ngIf="item.viewRowAction" (click)="viewRow(element)">
+              <img [src]="element[item.index]"/>
+            </a>
+            <ng-template [ngIf]="!item.action && !item.viewRowAction && !item.addRowAction">
+              <img [src]="element[item.index]"/>
+            </ng-template>
+          </ng-template>
+
+          <!--MONEDA-->
+          <ng-template [ngIf]="item.type == 'currency'">
+            <a *ngIf="item.action" mat-button (click)="actionParent(element)">
+              {{item.customLabel ? item.customLabel : element[item.index] | currency}}
+            </a>
+            <a *ngIf="item.addRowAction" mat-button (click)="addRow(element)">
+              {{item.customLabel ? item.customLabel : element[item.index] | currency}}
+            </a>
+            <a *ngIf="item.viewRowAction" mat-button (click)="viewRow(element)">
+              {{item.customLabel ? item.customLabel : element[item.index] | currency}}
+            </a>
+            <ng-template [ngIf]="!item.action && !item.viewRowAction && !item.addRowAction">
+              {{element[item.index] | currency}}
+            </ng-template>
+          </ng-template>
+
+          <!--NUMERO-->
+          <ng-template [ngIf]="item.type == 'number'">
+            <a *ngIf="item.action" mat-button (click)="actionParent(element)">
+              {{item.customLabel ? item.customLabel : element[item.index] | number}}
+            </a>
+            <a *ngIf="item.addRowAction" mat-button (click)="addRow(element)">
+              {{item.customLabel ? item.customLabel : element[item.index] | number}}
+            </a>
+            <a *ngIf="item.viewRowAction" mat-button (click)="viewRow(element)">
+              {{item.customLabel ? item.customLabel : element[item.index] | number}}
+            </a>
+            <ng-template [ngIf]="!item.action && !item.viewRowAction && !item.addRowAction">
+              {{element[item.index] | number}}
+            </ng-template>
+          </ng-template>
+
+          <!--FECHA-->
+          <ng-template [ngIf]="item.type == 'date'">
+            <a *ngIf="item.action" mat-button (click)="actionParent(element)">
+              {{item.customLabel ? item.customLabel : element[item.index] |  date: 'yyyy-MM-dd'}}
+            </a>
+            <a *ngIf="item.addRowAction" mat-button (click)="addRow(element)">
+              {{item.customLabel ? item.customLabel : element[item.index] |  date: 'yyyy-MM-dd'}}
+            </a>
+            <a *ngIf="item.viewRowAction" mat-button (click)="viewRow(element)">
+              {{item.customLabel ? item.customLabel : element[item.index] |  date: 'yyyy-MM-dd'}}
+            </a>
+            <ng-template [ngIf]="!item.action && !item.viewRowAction && !item.addRowAction">
+              {{element[item.index] |  date: 'yyyy-MM-dd'}}
+            </ng-template>
+          </ng-template>
+
+          <!--ACCIONES-->
+          <ng-template [ngIf]="item.type == 'buttons'">
+            <ng-container *ngFor="let button of item.buttons">
+              <a *ngIf="button.addRowAction" mat-button (click)="addRow(element)">
+                <mat-icon>{{button.icon}}</mat-icon>
+              </a>
+              <a *ngIf="button.viewRowAction" mat-button (click)="viewRow(element)">
+                <mat-icon>{{button.icon}}</mat-icon>
+              </a>
+              <a *ngIf="button.removeRowAction" mat-button (click)="removeItem(element)">
+                <mat-icon>{{button.icon}}</mat-icon>
+              </a>
+            </ng-container>
+
+          </ng-template>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+
+    </mat-table>
+
+  </div>
+</div>

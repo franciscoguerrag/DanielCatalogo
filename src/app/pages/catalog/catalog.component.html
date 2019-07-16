@@ -1,0 +1,9 @@
+<app-table-generic
+  [columns]="displayedColumns"
+  [itemsType]="itemsType"
+  [header]="'Productos'"
+  [subHeader]="'Catálogo de productos'"
+  (callParent)="openModal($event)"
+  (addItemRow)="addItemCart($event)"
+  [actionAdd]="false"
+></app-table-generic>
